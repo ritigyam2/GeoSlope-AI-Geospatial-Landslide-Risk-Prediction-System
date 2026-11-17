@@ -1,0 +1,944 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>GeoRisk Himachal — Landslide Prediction & Risk Assessment Dashboard</title>
+  
+  <!-- Typography: IBM Plex Sans & IBM Plex Mono -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  
+  <!-- Material Symbols Outlined (NO EMOJIS ALLOWED) -->
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+  
+  <!-- Application Stylesheet -->
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="app-container">
+  
+  <!-- ==================== SIDEBAR NAVIGATION ==================== -->
+  <aside class="sidebar">
+    <div class="sidebar-brand">
+      <div class="brand-icon">
+        <span class="material-symbols-outlined">terrain</span>
+      </div>
+      <div>
+        <div class="brand-title">GeoRisk Himachal</div>
+        <div class="brand-subtitle">Geotechnical ML Platform</div>
+      </div>
+    </div>
+    
+    <nav class="sidebar-nav">
+      <div class="nav-category">Monitoring & Analytics</div>
+      <button class="nav-link active" data-tab="view-overview">
+        <span class="material-symbols-outlined">dashboard</span>
+        <span>Overview & KPIs</span>
+      </button>
+      <button class="nav-link" data-tab="view-benchmark">
+        <span class="material-symbols-outlined">stacked_line_chart</span>
+        <span>Model Benchmarks</span>
+      </button>
+      <button class="nav-link" data-tab="view-simulator">
+        <span class="material-symbols-outlined">tune</span>
+        <span>Live Risk Simulator</span>
+      </button>
+      
+      <div class="nav-category">Geospatial & Field Data</div>
+      <button class="nav-link" data-tab="view-districts">
+        <span class="material-symbols-outlined">map</span>
+        <span>District Hazard Profiles</span>
+      </button>
+      <button class="nav-link" data-tab="view-inspector">
+        <span class="material-symbols-outlined">table_view</span>
+        <span>Test Sample Inspector</span>
+      </button>
+      <button class="nav-link" data-tab="view-methodology">
+        <span class="material-symbols-outlined">science</span>
+        <span>Feature Engineering</span>
+      </button>
+    </nav>
+    
+    <div class="sidebar-footer">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 6px;">
+        <span style="font-weight:600; color:var(--text-main);">Study Area</span>
+        <span class="badge-tag teal">HP, INDIA</span>
+      </div>
+      <div style="color:var(--text-faint); font-size:11px; line-height:1.45;">
+        12,409 Observation Locations<br>
+        47 Features · 0 Data Leakage
+      </div>
+    </div>
+  </aside>
+
+  <!-- ==================== MAIN CONTENT WRAPPER ==================== -->
+  <div class="main-wrapper">
+    
+    <!-- Topbar -->
+    <header class="topbar">
+      <div class="topbar-left">
+        <div class="crumb-trail">
+          <span>Himachal Pradesh Geotechnical Study</span>
+          <span class="crumb-divider">/</span>
+          <span class="crumb-current" id="crumb-display">Overview & KPIs</span>
+        </div>
+      </div>
+      
+      <div class="topbar-right">
+        <!-- Model Selection Dropdown -->
+        <div class="model-selector-wrapper">
+          <span class="material-symbols-outlined" style="font-size:16px; color:var(--accent);">model_training</span>
+          <label for="global-model-select" style="font-weight:600; font-size:11px; color:var(--text-muted);">Active Pipeline:</label>
+          <select id="global-model-select" class="model-select">
+            <option value="xgboost" selected>XGBoost (Champion · 90.26% AUC)</option>
+            <option value="random_forest">Random Forest (89.36% AUC)</option>
+            <option value="logistic_regression">Logistic Regression (86.81% AUC)</option>
+            <option value="svm">Support Vector Machine (86.49% AUC)</option>
+          </select>
+        </div>
+
+        <!-- Dark/Light Theme Toggle -->
+        <button id="theme-toggle-btn" class="btn-icon" title="Toggle dark/light color scheme">
+          <span class="material-symbols-outlined" id="theme-icon">dark_mode</span>
+        </button>
+      </div>
+    </header>
+
+    <!-- Scrollable Canvas -->
+    <main class="content-canvas">
+      
+      <!-- ==================== TAB 1: OVERVIEW & KPIS ==================== -->
+      <section id="view-overview" class="tab-pane active">
+        
+        <!-- Dribbble-Style Hero Showcase Banner -->
+        <div class="hero-showcase">
+          <img src="assets/images/himalayas_satellite_terrain.jpg" alt="Western Himalayas Terrain" class="hero-backdrop-img">
+          <div class="hero-overlay-gradient"></div>
+          <div class="hero-content">
+            <div class="hero-tag">
+              <span class="material-symbols-outlined" style="font-size:14px;">satellite_alt</span>
+              <span>Geotechnical Machine Learning · Western Himalayas</span>
+            </div>
+            <h1 class="hero-title">Landslide Prediction & Risk Assessment Platform</h1>
+            <p class="hero-desc">
+              Trained on 12,409 georeferenced inventory records across Himachal Pradesh, India. Evaluates multi-variable terrain morphology, precipitation triggers, drainage proximity, and land-use patterns across 4 machine learning pipelines.
+            </p>
+            <div class="hero-actions">
+              <button class="btn-primary" onclick="switchTab('view-simulator')">
+                <span class="material-symbols-outlined" style="font-size:18px;">tune</span>
+                <span>Launch Live Risk Simulator</span>
+              </button>
+              <button class="btn-secondary" onclick="switchTab('view-districts')">
+                <span class="material-symbols-outlined" style="font-size:18px;">explore</span>
+                <span>Explore 12 Districts</span>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- User-Friendly Quick Steps -->
+        <div class="steps-grid">
+          <div class="step-card">
+            <div class="step-num-icon">
+              <span class="material-symbols-outlined">database</span>
+            </div>
+            <div class="step-content">
+              <h3>1. Comprehensive Inventory</h3>
+              <p>12,409 observation locations across Himachal Pradesh (9,945 train / 2,464 test) with 47 engineered terrain & climate predictors.</p>
+            </div>
+          </div>
+          
+          <div class="step-card">
+            <div class="step-num-icon">
+              <span class="material-symbols-outlined">batch_prediction</span>
+            </div>
+            <div class="step-content">
+              <h3>2. Multi-Model Consensus</h3>
+              <p>Compares XGBoost (81.86% acc, 0.9026 AUC), Random Forest (81.09%), Logistic Regression (78.65%), and SVM (78.41%).</p>
+            </div>
+          </div>
+
+          <div class="step-card">
+            <div class="step-num-icon">
+              <span class="material-symbols-outlined">security</span>
+            </div>
+            <div class="step-content">
+              <h3>3. Early Warning Advisory</h3>
+              <p>Interactive simulator provides real-time geotechnical slope failure probabilities and automated engineering mitigation advisories.</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Primary KPI Metric Cards -->
+        <div class="kpi-grid">
+          <div class="kpi-card">
+            <div class="kpi-header">
+              <span class="kpi-title">Test Accuracy</span>
+              <span class="material-symbols-outlined" style="font-size:18px;">verified</span>
+            </div>
+            <div class="kpi-value-row">
+              <span class="kpi-val" id="kpi-accuracy">81.86%</span>
+              <span class="kpi-status-tag positive">
+                <span class="material-symbols-outlined" style="font-size:14px;">trending_up</span>
+                <span>Champion</span>
+              </span>
+            </div>
+            <div class="kpi-sub">Held-out test score (N = 2,464)</div>
+          </div>
+
+          <div class="kpi-card">
+            <div class="kpi-header">
+              <span class="kpi-title">Landslide Recall</span>
+              <span class="material-symbols-outlined" style="font-size:18px;">warning</span>
+            </div>
+            <div class="kpi-value-row">
+              <span class="kpi-val" id="kpi-recall">86.08%</span>
+              <span class="kpi-status-tag positive">
+                <span>1,095 / 1,272</span>
+              </span>
+            </div>
+            <div class="kpi-sub">True landslide detection rate</div>
+          </div>
+
+          <div class="kpi-card">
+            <div class="kpi-header">
+              <span class="kpi-title">Discrimination (ROC-AUC)</span>
+              <span class="material-symbols-outlined" style="font-size:18px;">analytics</span>
+            </div>
+            <div class="kpi-value-row">
+              <span class="kpi-val" id="kpi-roc">0.9026</span>
+              <span class="kpi-status-tag positive">
+                <span>Strong</span>
+              </span>
+            </div>
+            <div class="kpi-sub">Ranking performance across thresholds</div>
+          </div>
+
+          <div class="kpi-card">
+            <div class="kpi-header">
+              <span class="kpi-title">PR-AUC (Average Precision)</span>
+              <span class="material-symbols-outlined" style="font-size:18px;">precision_manufacturing</span>
+            </div>
+            <div class="kpi-value-row">
+              <span class="kpi-val" id="kpi-prauc">0.9019</span>
+              <span class="kpi-status-tag neutral">
+                <span>Baseline: 0.516</span>
+              </span>
+            </div>
+            <div class="kpi-sub">Precision-recall threshold area</div>
+          </div>
+        </div>
+
+        <!-- Real-World Field Images Showcase with Attributions -->
+        <div style="margin-bottom: 24px;">
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 14px;">
+            <div>
+              <h3 style="font-size:15px; font-weight:700; color:var(--text-main); display:flex; align-items:center; gap:8px;">
+                <span class="material-symbols-outlined" style="color:var(--accent);">photo_camera</span>
+                <span>Documented Field Landslides & Geological Hazards in Himachal Pradesh</span>
+              </h3>
+              <p style="font-size:12px; color:var(--text-muted); margin-top:2px;">
+                Direct visual evidence of slope instability modes analyzed in this machine learning project.
+              </p>
+            </div>
+            <span class="badge-tag teal">Field Documentation</span>
+          </div>
+
+          <div class="image-showcase-grid">
+            
+            <!-- Image 1: Kinnaur -->
+            <div class="image-card">
+              <div class="image-wrap">
+                <img src="assets/images/kinnaur_landslide.jpg" alt="Nigulsari Landslide, Kinnaur District" loading="lazy">
+              </div>
+              <div class="image-card-body">
+                <div class="image-card-title">
+                  <span class="material-symbols-outlined" style="font-size:16px; color:var(--hazard-red);">landslide</span>
+                  <span>Kinnaur Highway Rupture (Nigulsari)</span>
+                </div>
+                <div class="image-card-desc">
+                  Catastrophic rockfall and debris flow along NH-5 triggered by extreme slope inclination and fractured bedrock joints.
+                </div>
+                <div class="image-attribution-box">
+                  <span>Photo: Dfromhimalayas</span>
+                  <a href="https://commons.wikimedia.org/wiki/File:Landslide_Nigulsari,_Kinnaur.jpg" target="_blank" rel="noopener">Wikimedia Commons (CC BY 4.0)</a>
+                </div>
+              </div>
+            </div>
+
+            <!-- Image 2: HP Highway Debris Flow -->
+            <div class="image-card">
+              <div class="image-wrap">
+                <img src="assets/images/hp_highway_landslide.jpg" alt="Mountain Road Landslide, Himachal Pradesh" loading="lazy">
+              </div>
+              <div class="image-card-body">
+                <div class="image-card-title">
+                  <span class="material-symbols-outlined" style="font-size:16px; color:var(--moderate-amber);">warning</span>
+                  <span>Monsoon Road-Cut Slope Failure</span>
+                </div>
+                <div class="image-card-desc">
+                  Saturated slope failure along arterial mountain corridor, illustrating the destructive impact of pore-water pressure and road undercut toe removal.
+                </div>
+                <div class="image-attribution-box">
+                  <span>Photo: Sridhar Rao</span>
+                  <a href="https://commons.wikimedia.org/wiki/File:Landslides_in_Himachal_Pradesh.jpg" target="_blank" rel="noopener">Wikimedia Commons (CC BY-SA 4.0)</a>
+                </div>
+              </div>
+            </div>
+
+            <!-- Image 3: Spiti Scree Slope -->
+            <div class="image-card">
+              <div class="image-wrap">
+                <img src="assets/images/spiti_slope_scree.jpg" alt="Mane Kogma Scree Slope, Spiti Valley" loading="lazy">
+              </div>
+              <div class="image-card-body">
+                <div class="image-card-title">
+                  <span class="material-symbols-outlined" style="font-size:16px; color:var(--severe-purple);">ac_unit</span>
+                  <span>Spiti Valley Alpine Scree Threat</span>
+                </div>
+                <div class="image-card-desc">
+                  High-altitude scree accumulation above Mane Kogma village in Spiti Valley, driven by freeze-thaw weathering and sparse vegetative root binding.
+                </div>
+                <div class="image-attribution-box">
+                  <span>Photo: Timothy Gonsalves</span>
+                  <a href="https://commons.wikimedia.org/wiki/File:Mane_Kogma_Landslide_Danger_Spiti_Jun18_DSC05504.jpg" target="_blank" rel="noopener">Wikimedia Commons (CC BY-SA 4.0)</a>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- 2-Column Section: Confusion Matrix & Top Risk Features -->
+        <div class="dashboard-grid-2">
+          
+          <!-- Confusion Matrix Card -->
+          <div class="panel">
+            <div class="panel-header">
+              <div class="panel-title">
+                <span class="material-symbols-outlined">grid_view</span>
+                <span>Held-Out Confusion Matrix (2,464 Test Locations)</span>
+              </div>
+              <span class="badge-tag teal" id="cm-model-badge">XGBoost</span>
+            </div>
+            <div class="panel-body">
+              <div class="matrix-container">
+                <div class="matrix-grid">
+                  <div></div>
+                  <div class="matrix-header-cell">Pred: Non-Landslide</div>
+                  <div class="matrix-header-cell">Pred: Landslide</div>
+                  
+                  <div class="matrix-header-cell">Actual: Safe</div>
+                  <div class="matrix-cell tn">
+                    <div class="matrix-cell-count" id="cm-tn">922</div>
+                    <div class="matrix-cell-label">True Negative</div>
+                    <div class="matrix-cell-sub">Safe Identified</div>
+                  </div>
+                  <div class="matrix-cell fp">
+                    <div class="matrix-cell-count" id="cm-fp">270</div>
+                    <div class="matrix-cell-label">False Positive</div>
+                    <div class="matrix-cell-sub">False Alarms</div>
+                  </div>
+
+                  <div class="matrix-header-cell">Actual: Slide</div>
+                  <div class="matrix-cell fn">
+                    <div class="matrix-cell-count" id="cm-fn">177</div>
+                    <div class="matrix-cell-label">False Negative</div>
+                    <div class="matrix-cell-sub">Missed Landslides</div>
+                  </div>
+                  <div class="matrix-cell tp">
+                    <div class="matrix-cell-count" id="cm-tp">1,095</div>
+                    <div class="matrix-cell-label">True Positive</div>
+                    <div class="matrix-cell-sub">Landslides Detected</div>
+                  </div>
+                </div>
+
+                <div style="display:flex; justify-content:space-between; font-size:12px; color:var(--text-muted); border-top:1px solid var(--rule); padding-top:10px;">
+                  <span>Specificity: <strong class="num" id="cm-spec">77.35%</strong></span>
+                  <span>F1-Score: <strong class="num" id="cm-f1">83.05%</strong></span>
+                  <span>Miss Rate: <strong class="num" id="cm-fnr" style="color:var(--hazard-red);">13.92%</strong></span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Top Feature Importance Card -->
+          <div class="panel">
+            <div class="panel-header">
+              <div class="panel-title">
+                <span class="material-symbols-outlined">bar_chart</span>
+                <span>Top Predictive Geological Features</span>
+              </div>
+              <span class="badge-tag teal">Gain Importance</span>
+            </div>
+            <div class="panel-body" id="feature-bars-container">
+              <!-- Dynamically populated via JS -->
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Model Family Summary Table -->
+        <div class="panel">
+          <div class="panel-header">
+            <div class="panel-title">
+              <span class="material-symbols-outlined">compare_arrows</span>
+              <span>Model Comparison Across All Architectures</span>
+            </div>
+            <span style="font-size:12px; color:var(--text-faint);">Evaluated on identical test split (N = 2,464)</span>
+          </div>
+          <div class="panel-body table-wrapper" style="padding:0;">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>Model Architecture</th>
+                  <th>Status</th>
+                  <th>Test Accuracy</th>
+                  <th>Recall (Class 1)</th>
+                  <th>Precision</th>
+                  <th>Specificity</th>
+                  <th>F1-Score</th>
+                  <th>ROC-AUC</th>
+                  <th>PR-AUC</th>
+                </tr>
+              </thead>
+              <tbody id="overview-comparison-tbody">
+                <!-- Dynamically populated -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+      </section>
+
+      <!-- ==================== TAB 2: MODEL BENCHMARK & CURVES ==================== -->
+      <section id="view-benchmark" class="tab-pane">
+        
+        <div class="dashboard-grid-2">
+          
+          <!-- ROC Curve Panel -->
+          <div class="panel">
+            <div class="panel-header">
+              <div class="panel-title">
+                <span class="material-symbols-outlined">show_chart</span>
+                <span>Receiver Operating Characteristic (ROC)</span>
+              </div>
+              <div style="font-size:11px; color:var(--text-muted); display:flex; gap:10px;">
+                <span style="display:flex; align-items:center; gap:4px;"><span style="width:8px; height:8px; background:var(--chart-1); border-radius:50%;"></span> XGB</span>
+                <span style="display:flex; align-items:center; gap:4px;"><span style="width:8px; height:8px; background:var(--chart-2); border-radius:50%;"></span> RF</span>
+                <span style="display:flex; align-items:center; gap:4px;"><span style="width:8px; height:8px; background:var(--chart-3); border-radius:50%;"></span> LR</span>
+                <span style="display:flex; align-items:center; gap:4px;"><span style="width:8px; height:8px; background:var(--chart-4); border-radius:50%;"></span> SVM</span>
+              </div>
+            </div>
+            <div class="panel-body">
+              <div class="svg-chart-container" id="roc-chart-container">
+                <!-- SVG dynamically drawn via JS -->
+              </div>
+              <div style="font-size:11px; color:var(--text-muted); margin-top:8px; text-align:center;">
+                False Positive Rate (1 - Specificity) vs. True Positive Rate (Sensitivity)
+              </div>
+            </div>
+          </div>
+
+          <!-- PR Curve Panel -->
+          <div class="panel">
+            <div class="panel-header">
+              <div class="panel-title">
+                <span class="material-symbols-outlined">area_chart</span>
+                <span>Precision-Recall Curve (PR-AUC)</span>
+              </div>
+              <span class="badge-tag teal">Baseline: 51.6%</span>
+            </div>
+            <div class="panel-body">
+              <div class="svg-chart-container" id="pr-chart-container">
+                <!-- SVG dynamically drawn via JS -->
+              </div>
+              <div style="font-size:11px; color:var(--text-muted); margin-top:8px; text-align:center;">
+                Recall vs. Precision across classification probability thresholds
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Comprehensive 12-Metric Deep Table -->
+        <div class="panel" style="margin-top:20px;">
+          <div class="panel-header">
+            <div class="panel-title">
+              <span class="material-symbols-outlined">analytics</span>
+              <span>Exhaustive Performance Metrics Matrix</span>
+            </div>
+            <button class="preset-chip" id="download-metrics-btn">
+              <span class="material-symbols-outlined" style="font-size:14px;">download</span>
+              <span>Export CSV</span>
+            </button>
+          </div>
+          <div class="panel-body table-wrapper" style="padding:0;">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>Performance Dimension</th>
+                  <th>Formula / Interpretation</th>
+                  <th>XGBoost</th>
+                  <th>Random Forest</th>
+                  <th>Logistic Regression</th>
+                  <th>SVM (RBF)</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><strong>Accuracy</strong></td>
+                  <td>(TP + TN) / Total</td>
+                  <td class="numeric"><strong>81.86%</strong></td>
+                  <td class="numeric">81.09%</td>
+                  <td class="numeric">78.65%</td>
+                  <td class="numeric">78.41%</td>
+                </tr>
+                <tr>
+                  <td><strong>Recall / Sensitivity</strong></td>
+                  <td>TP / (TP + FN) — Landslide detection</td>
+                  <td class="numeric"><strong>86.08%</strong></td>
+                  <td class="numeric">84.04%</td>
+                  <td class="numeric">84.67%</td>
+                  <td class="numeric">84.20%</td>
+                </tr>
+                <tr>
+                  <td><strong>Precision</strong></td>
+                  <td>TP / (TP + FP) — Alarm reliability</td>
+                  <td class="numeric">80.22%</td>
+                  <td class="numeric"><strong>80.26%</strong></td>
+                  <td class="numeric">76.49%</td>
+                  <td class="numeric">76.39%</td>
+                </tr>
+                <tr>
+                  <td><strong>Specificity</strong></td>
+                  <td>TN / (TN + FP) — Safe terrain recognition</td>
+                  <td class="numeric">77.35%</td>
+                  <td class="numeric"><strong>77.94%</strong></td>
+                  <td class="numeric">72.23%</td>
+                  <td class="numeric">72.23%</td>
+                </tr>
+                <tr>
+                  <td><strong>F1-Score</strong></td>
+                  <td>Harmonic mean (Precision, Recall)</td>
+                  <td class="numeric"><strong>83.05%</strong></td>
+                  <td class="numeric">82.10%</td>
+                  <td class="numeric">80.37%</td>
+                  <td class="numeric">80.10%</td>
+                </tr>
+                <tr>
+                  <td><strong>ROC-AUC</strong></td>
+                  <td>Area under ROC curve</td>
+                  <td class="numeric"><strong>0.9026</strong></td>
+                  <td class="numeric">0.8936</td>
+                  <td class="numeric">0.8681</td>
+                  <td class="numeric">0.8649</td>
+                </tr>
+                <tr>
+                  <td><strong>PR-AUC</strong></td>
+                  <td>Average Precision score</td>
+                  <td class="numeric"><strong>0.9019</strong></td>
+                  <td class="numeric">0.8920</td>
+                  <td class="numeric">0.8678</td>
+                  <td class="numeric">0.8556</td>
+                </tr>
+                <tr>
+                  <td><strong>Miss Rate (False Negative Rate)</strong></td>
+                  <td>FN / (TP + FN) — Dangerous omissions</td>
+                  <td class="numeric"><strong style="color:var(--safe-green);">13.92%</strong></td>
+                  <td class="numeric">15.96%</td>
+                  <td class="numeric">15.33%</td>
+                  <td class="numeric">15.80%</td>
+                </tr>
+                <tr>
+                  <td><strong>Inference Latency (Test Set)</strong></td>
+                  <td>Runtime on 2,464 samples</td>
+                  <td class="numeric">4.5 ms</td>
+                  <td class="numeric">12.1 ms</td>
+                  <td class="numeric"><strong>0.8 ms</strong></td>
+                  <td class="numeric">185.0 ms</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+      </section>
+
+      <!-- ==================== TAB 3: LIVE RISK SIMULATOR ==================== -->
+      <section id="view-simulator" class="tab-pane">
+        
+        <div class="panel" style="margin-bottom:20px;">
+          <div class="panel-header">
+            <div class="panel-title">
+              <span class="material-symbols-outlined">tune</span>
+              <span>Interactive Geotechnical Hazard Inference Engine</span>
+            </div>
+            <div class="sim-preset-chips">
+              <span style="font-size:11px; color:var(--text-muted); align-self:center;">Presets:</span>
+              <button class="preset-chip" onclick="applyPreset('kullu')">
+                <span class="material-symbols-outlined" style="font-size:14px;">flood</span>
+                <span>Kullu Monsoon Ridge</span>
+              </button>
+              <button class="preset-chip" onclick="applyPreset('mandi')">
+                <span class="material-symbols-outlined" style="font-size:14px;">forest</span>
+                <span>Mandi Steep Deforested</span>
+              </button>
+              <button class="preset-chip" onclick="applyPreset('lahaul')">
+                <span class="material-symbols-outlined" style="font-size:14px;">ac_unit</span>
+                <span>Lahaul High Alpine</span>
+              </button>
+              <button class="preset-chip" onclick="applyPreset('kangra')">
+                <span class="material-symbols-outlined" style="font-size:14px;">nature</span>
+                <span>Kangra Gentle Valley</span>
+              </button>
+            </div>
+          </div>
+          
+          <div class="panel-body">
+            <div class="simulator-layout">
+              
+              <!-- Controls Pane -->
+              <div class="sim-controls-pane">
+                
+                <div class="sim-input-group">
+                  <div class="sim-label-row">
+                    <span>Slope Gradient:</span>
+                    <span class="sim-val-display" id="disp-slope">34°</span>
+                  </div>
+                  <input type="range" class="sim-slider" id="slider-slope" min="2" max="60" value="34" step="1">
+                  <span style="font-size:10px; color:var(--text-faint);">Terrain steepness angle (dominant shear failure trigger)</span>
+                </div>
+
+                <div class="sim-input-group">
+                  <div class="sim-label-row">
+                    <span>Cumulative Rainfall:</span>
+                    <span class="sim-val-display" id="disp-rainfall">1,650 mm</span>
+                  </div>
+                  <input type="range" class="sim-slider" id="slider-rainfall" min="300" max="2800" value="1650" step="25">
+                  <span style="font-size:10px; color:var(--text-faint);">Monsoon precipitation and pore-water pressure trigger</span>
+                </div>
+
+                <div class="sim-input-group">
+                  <div class="sim-label-row">
+                    <span>Elevation:</span>
+                    <span class="sim-val-display" id="disp-elevation">2,400 m</span>
+                  </div>
+                  <input type="range" class="sim-slider" id="slider-elevation" min="400" max="4200" value="2400" step="50">
+                  <span style="font-size:10px; color:var(--text-faint);">Altitude above mean sea level</span>
+                </div>
+
+                <div class="sim-input-group">
+                  <div class="sim-label-row">
+                    <span>Distance to Drainage / River:</span>
+                    <span class="sim-val-display" id="disp-river">180 m</span>
+                  </div>
+                  <input type="range" class="sim-slider" id="slider-river" min="10" max="2500" value="180" step="20">
+                  <span style="font-size:10px; color:var(--text-faint);">Proximity to toe-erosion water channels</span>
+                </div>
+
+                <div class="sim-input-group">
+                  <div class="sim-label-row">
+                    <span>NDVI (Vegetation Density):</span>
+                    <span class="sim-val-display" id="disp-ndvi">0.25</span>
+                  </div>
+                  <input type="range" class="sim-slider" id="slider-ndvi" min="-0.2" max="0.8" value="0.25" step="0.02">
+                  <span style="font-size:10px; color:var(--text-faint);">Root cohesion index (low NDVI = bare vulnerable soil)</span>
+                </div>
+
+                <div class="sim-input-group">
+                  <div class="sim-label-row">
+                    <span>Land Use / Land Cover (LULC):</span>
+                  </div>
+                  <select class="sim-select" id="select-lulc">
+                    <option value="bare">Built / Bare Exposed Ground (LULC 50)</option>
+                    <option value="crop">Cropland / Agricultural Slope (LULC 40)</option>
+                    <option value="forest" selected>Forest / Dense Natural Vegetation (LULC 10)</option>
+                    <option value="snow">Snow / Glacier / Rock (LULC 70-100)</option>
+                  </select>
+                </div>
+
+              </div>
+
+              <!-- Output Results Pane -->
+              <div class="sim-results-pane">
+                
+                <!-- Primary Gauge Card -->
+                <div class="hazard-gauge-card">
+                  <div class="gauge-primary">
+                    <div style="font-size:11px; text-transform:uppercase; letter-spacing:0.04em; color:var(--text-faint); font-weight:600;">
+                      Composite Hazard Assessment
+                    </div>
+                    <div class="gauge-percentage-row">
+                      <span class="gauge-pct-num num" id="res-prob-pct">82.4%</span>
+                      <span class="gauge-pct-label">Landslide Probability</span>
+                    </div>
+                    <div class="gauge-meter-wrapper">
+                      <div class="gauge-track">
+                        <div class="gauge-fill" id="res-gauge-bar" style="width:82.4%; background-color:var(--hazard-red);"></div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div style="text-align:right;">
+                    <div class="gauge-category-pill high" id="res-category-pill">
+                      <span class="material-symbols-outlined" style="font-size:16px;">report_problem</span>
+                      <span id="res-category-text">HIGH SUSCEPTIBILITY</span>
+                    </div>
+                    <div style="font-size:11px; color:var(--text-muted); margin-top:8px;">
+                      Hazard Index: <strong class="num" id="res-hazard-idx">+1.84</strong>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Multi-Model Consensus Cards -->
+                <div>
+                  <div style="font-size:12px; font-weight:600; color:var(--text-main); margin-bottom:8px; display:flex; align-items:center; gap:6px;">
+                    <span class="material-symbols-outlined" style="font-size:16px; color:var(--accent);">hub</span>
+                    <span>Multi-Model Prediction Consensus</span>
+                  </div>
+                  <div class="consensus-grid">
+                    <div class="model-consensus-card">
+                      <div class="model-consensus-name">XGBoost (Champion)</div>
+                      <div class="model-consensus-val num" id="res-xgb-val" style="color:var(--hazard-red);">84.6%</div>
+                      <div class="model-consensus-sub" id="res-xgb-label" style="color:var(--hazard-red); font-weight:600;">Landslide</div>
+                    </div>
+                    <div class="model-consensus-card">
+                      <div class="model-consensus-name">Random Forest</div>
+                      <div class="model-consensus-val num" id="res-rf-val" style="color:var(--hazard-red);">81.2%</div>
+                      <div class="model-consensus-sub" id="res-rf-label" style="color:var(--hazard-red); font-weight:600;">Landslide</div>
+                    </div>
+                    <div class="model-consensus-card">
+                      <div class="model-consensus-name">Logistic Regression</div>
+                      <div class="model-consensus-val num" id="res-lr-val" style="color:var(--hazard-red);">79.5%</div>
+                      <div class="model-consensus-sub" id="res-lr-label" style="color:var(--hazard-red); font-weight:600;">Landslide</div>
+                    </div>
+                    <div class="model-consensus-card">
+                      <div class="model-consensus-name">SVM (RBF Kernel)</div>
+                      <div class="model-consensus-val num" id="res-svm-val" style="color:var(--hazard-red);">80.1%</div>
+                      <div class="model-consensus-sub" id="res-svm-label" style="color:var(--hazard-red); font-weight:600;">Landslide</div>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Dynamic Geological Advisory Box -->
+                <div class="advisory-box" id="res-advisory-box">
+                  <div class="advisory-header">
+                    <span class="material-symbols-outlined">security_update_warning</span>
+                    <span>Automated Geotechnical Risk Advisory</span>
+                  </div>
+                  <p id="res-advisory-text">
+                    Terrain exhibits critical failure risk driven by high slope inclination (34°) and severe monsoon precipitation saturation (1,650 mm). Toe proximity to water channel creates heightened scouring hazards. Mitigation measures recommended: slope drainage diversion, wire-mesh netting, and immediate early-warning monitoring.
+                  </p>
+                </div>
+
+              </div>
+
+            </div>
+          </div>
+        </div>
+
+      </section>
+
+      <!-- ==================== TAB 4: DISTRICT HAZARD PROFILES ==================== -->
+      <section id="view-districts" class="tab-pane">
+        
+        <div class="filter-bar">
+          <span style="font-weight:600; font-size:13px; display:flex; align-items:center; gap:6px;">
+            <span class="material-symbols-outlined" style="font-size:18px; color:var(--accent);">filter_list</span>
+            <span>Filter Himachal Pradesh Districts:</span>
+          </span>
+          <select class="filter-select" id="district-filter-select" onchange="filterDistricts(this.value)">
+            <option value="ALL">All 12 Districts</option>
+            <option value="Severe">Severe Risk Only</option>
+            <option value="High">High Risk Only</option>
+            <option value="Moderate">Moderate Risk Only</option>
+            <option value="Low">Low Risk Only</option>
+          </select>
+          <div style="margin-left:auto; font-size:11px; color:var(--text-faint);">
+            Click any district to view detailed geotechnical breakdown
+          </div>
+        </div>
+
+        <div class="district-grid" id="district-cards-grid">
+          <!-- Dynamically populated via JS -->
+        </div>
+
+      </section>
+
+      <!-- ==================== TAB 5: TEST SAMPLE INSPECTOR ==================== -->
+      <section id="view-inspector" class="tab-pane">
+        
+        <div class="panel">
+          <div class="panel-header">
+            <div class="panel-title">
+              <span class="material-symbols-outlined">find_in_page</span>
+              <span>Held-Out Test Sample Audit (2,464 Evaluated Locations)</span>
+            </div>
+            <div style="display:flex; align-items:center; gap:8px;">
+              <input type="text" class="filter-input" id="sample-search-input" placeholder="Search by ID or land cover..." onkeyup="filterSampleTable()">
+              <select class="filter-select" id="sample-status-select" onchange="filterSampleTable()">
+                <option value="ALL">All Outcomes</option>
+                <option value="True Positive (Hit)">True Positives (Hits)</option>
+                <option value="True Negative (Safe)">True Negatives (Safe)</option>
+                <option value="False Positive (Alarm)">False Positives (Alarms)</option>
+                <option value="False Negative (Missed)">False Negatives (Missed)</option>
+              </select>
+            </div>
+          </div>
+          
+          <div class="panel-body table-wrapper" style="padding:0;">
+            <table class="data-table" id="sample-inspector-table">
+              <thead>
+                <tr>
+                  <th>Sample ID</th>
+                  <th>Actual Label</th>
+                  <th>XGBoost Pred</th>
+                  <th>Confidence</th>
+                  <th>Confusion Status</th>
+                  <th>Slope (Z)</th>
+                  <th>Rainfall (Z)</th>
+                  <th>Elevation (Z)</th>
+                  <th>NDVI (Z)</th>
+                  <th>Hazard Index</th>
+                  <th>Land Cover (LULC)</th>
+                </tr>
+              </thead>
+              <tbody id="sample-inspector-tbody">
+                <!-- Dynamically populated via JS -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+      </section>
+
+      <!-- ==================== TAB 6: FEATURE ENGINEERING & METHODOLOGY ==================== -->
+      <section id="view-methodology" class="tab-pane">
+        
+        <div class="dashboard-grid-2">
+          
+          <div class="panel">
+            <div class="panel-header">
+              <div class="panel-title">
+                <span class="material-symbols-outlined">architecture</span>
+                <span>The 9-Step Feature Engineering Architecture</span>
+              </div>
+              <span class="badge-tag teal">17 → 47 Features</span>
+            </div>
+            <div class="panel-body" style="font-size:13px; line-height:1.6; color:var(--text-muted);">
+              <ol style="padding-left:18px; display:flex; flex-direction:column; gap:8px;">
+                <li><strong>Winsorisation (Outlier Clipping):</strong> Extreme standard scores clipped at Q1 - 1.5×IQR and Q3 + 1.5×IQR based solely on training distribution.</li>
+                <li><strong>Logarithmic Transforms:</strong> Mitigated heavy right-skew on river distances and drainage flow accumulation (`Dist_River_log`, `FlowAccumulation_log`).</li>
+                <li><strong>Circular Aspect Encoding:</strong> Angular slope orientation decomposed into continuous orthogonal components: `Aspect_sin` and `Aspect_cos`.</li>
+                <li><strong>Polynomial (Squared) Terms:</strong> Captured non-linear geotechnical failure thresholds for slope, rainfall, and elevation (`Slope_sq`, `Rainfall_sq`).</li>
+                <li><strong>Domain Interaction Indices:</strong> Modeled physical pore-pressure and shear mechanisms: `Slope_x_Rainfall`, `Slope_minus_NDVI`, `Hazard_index`.</li>
+                <li><strong>Quantile Discretization:</strong> Created robust piecewise bins (`Rainfall_bin`, `Slope_bin`, `Elevation_bin`).</li>
+                <li><strong>Outlier Indicator Flags:</strong> Explicit flags for extreme sparse vegetation (`NDVI_extreme_low`) and flash flood risk (`Flow_high`).</li>
+                <li><strong>Hierarchical Land-Cover Grouping:</strong> Aggregated sparse LULC codes into 4 broad functional classes and marked rare occurrences (`LULC_rare`).</li>
+                <li><strong>Out-of-Fold Target Encoding:</strong> Smoothed categorical risk representation (`LULC_te`) with 5-fold cross-validation on train data to prevent label leakage.</li>
+              </ol>
+            </div>
+          </div>
+
+          <div class="panel">
+            <div class="panel-header">
+              <div class="panel-title">
+                <span class="material-symbols-outlined">shield</span>
+                <span>Data Leakage Prevention & Scientific Controls</span>
+              </div>
+              <span class="badge-tag teal">Rigorous Protocol</span>
+            </div>
+            <div class="panel-body" style="font-size:13px; line-height:1.6; color:var(--text-muted);">
+              <div style="display:flex; flex-direction:column; gap:12px;">
+                <div style="border-left:3px solid var(--safe-green); padding-left:12px;">
+                  <strong style="color:var(--text-main);">Zero Test Contamination:</strong>
+                  All scaling parameters, clipping limits, bin quantiles, and category rates were learned strictly from the 9,945 training locations and frozen before scoring the 2,464 test samples.
+                </div>
+                <div style="border-left:3px solid var(--accent); padding-left:12px;">
+                  <strong style="color:var(--text-main);">Out-of-Fold Target Encoding:</strong>
+                  Target rates for land cover (`LULC_te`) inside training were computed using 5-fold cross-validation. This prevents target memorization.
+                </div>
+                <div style="border-left:3px solid var(--moderate-amber); padding-left:12px;">
+                  <strong style="color:var(--text-main);">Why Tree Ensembles Saturated:</strong>
+                  While Logistic Regression gained +4.3% in ROC-AUC from engineered terms, XGBoost and Random Forest already partition non-linearities naturally. Multiple forms of elevation and rainfall introduced collinearity, stabilizing performance around ~0.902.
+                </div>
+                <div style="border-left:3px solid var(--hazard-red); padding-left:12px;">
+                  <strong style="color:var(--text-main);">Spatial Caveat:</strong>
+                  Pseudo-absence points in Class 0 denote unrecorded locations rather than permanently guaranteed safe zones. Real-world deployment should supplement with field sensor validation.
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+      </section>
+
+    </main>
+  </div>
+
+</div>
+
+<!-- ==================== DISTRICT DETAIL MODAL ==================== -->
+<div class="modal-overlay" id="district-modal" onclick="closeDistrictModal(event)">
+  <div class="modal-dialog" onclick="event.stopPropagation()">
+    <div class="modal-header">
+      <div style="display:flex; align-items:center; gap:8px;">
+        <span class="material-symbols-outlined" style="color:var(--accent); font-size:24px;">landscape</span>
+        <h3 id="modal-district-title" style="font-size:18px; font-weight:700; color:var(--text-main);">District Details</h3>
+      </div>
+      <button class="btn-icon" onclick="closeDistrictModal()" title="Close dialog">
+        <span class="material-symbols-outlined">close</span>
+      </button>
+    </div>
+    
+    <div class="modal-body">
+      <div id="modal-district-img-container" style="display:none; border-radius:var(--radius-md); overflow:hidden; border:1px solid var(--border);">
+        <img id="modal-district-img" src="" alt="District Landslide" style="width:100%; height:200px; object-fit:cover;">
+        <div id="modal-district-credit" class="image-attribution-box" style="padding:6px 12px; background:var(--surface-raised);"></div>
+      </div>
+
+      <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px;">
+        <div style="background:var(--surface-raised); padding:12px; border-radius:var(--radius-sm);">
+          <span style="font-size:11px; color:var(--text-faint);">Risk Category:</span><br>
+          <strong id="modal-district-risk" style="font-size:14px;">High</strong>
+        </div>
+        <div style="background:var(--surface-raised); padding:12px; border-radius:var(--radius-sm);">
+          <span style="font-size:11px; color:var(--text-faint);">Vulnerability Score:</span><br>
+          <strong id="modal-district-score" class="num" style="font-size:14px;">88 / 100</strong>
+        </div>
+        <div style="background:var(--surface-raised); padding:12px; border-radius:var(--radius-sm);">
+          <span style="font-size:11px; color:var(--text-faint);">Historical Recorded Slides:</span><br>
+          <strong id="modal-district-count" class="num" style="font-size:14px;">1,580</strong>
+        </div>
+        <div style="background:var(--surface-raised); padding:12px; border-radius:var(--radius-sm);">
+          <span style="font-size:11px; color:var(--text-faint);">Mean Annual Rainfall:</span><br>
+          <strong id="modal-district-rain" class="num" style="font-size:14px;">1,520 mm</strong>
+        </div>
+      </div>
+
+      <div style="background:var(--surface-subtle); padding:14px; border-radius:var(--radius-sm); border:1px solid var(--border);">
+        <strong style="font-size:12px; color:var(--text-main);">Identified Vulnerable Blocks:</strong>
+        <p id="modal-district-blocks" style="font-size:12px; color:var(--text-muted); margin-top:4px;">Rampur, Theog, Rohru, Kotkhai</p>
+      </div>
+
+      <button class="btn-primary" id="modal-simulate-btn" style="width:100%; justify-content:center; padding:11px;">
+        <span class="material-symbols-outlined">tune</span>
+        <span>Simulate This District in Risk Engine</span>
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- Data File Script -->
+<script src="dashboard_data.js"></script>
+
+<!-- Application Logic -->
+<script src="dashboard.js"></script>
+
+</body>
+</html>
