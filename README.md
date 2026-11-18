@@ -17,7 +17,7 @@
 
 ---
 
-## 📌 Executive Summary
+##  Executive Summary
 
 Slope failures and catastrophic landslides represent the primary geological hazard across the young, tectonically active Western Himalayas. In the state of Himachal Pradesh, India, steep terrain kinematics combined with erratic cloudburst precipitation events cause severe annual disruptions to strategic transit arteries, hydroelectric installations, and local populations.
 
@@ -31,7 +31,7 @@ Slope failures and catastrophic landslides represent the primary geological haza
 
 ---
 
-## 🏗 System Architecture
+##  System Architecture
 
 The GeoSlope-AI pipeline is engineered in modular layers adhering to Google production ML best practices:
 
@@ -106,7 +106,7 @@ The GeoSlope-AI pipeline is engineered in modular layers adhering to Google prod
 
 ---
 
-## 📊 Empirical Evaluation & Model Benchmarks
+##  Empirical Evaluation & Model Benchmarks
 
 All models were evaluated on the **identical, untouched held-out test split of 2,464 samples** ($1,272$ positive landslide instances, $1,192$ negative pseudo-absence instances).
 
@@ -133,7 +133,7 @@ All models were evaluated on the **identical, untouched held-out test split of 2
 
 ---
 
-## 🔬 Geotechnical Feature Engineering Pipeline (17 → 47)
+##  Geotechnical Feature Engineering Pipeline (17 → 47)
 
 Raw remote-sensing inputs rarely present linear correlations with slope failure. Drawing from the **Mohr-Coulomb failure criterion** ($\tau_f = c' + (\sigma_n - u)\tan\phi'$), raw predictors were systematically expanded into 47 non-linear and interaction terms:
 
@@ -150,7 +150,7 @@ Raw remote-sensing inputs rarely present linear correlations with slope failure.
 
 ---
 
-## 💻 Interactive Geotechnical Decision-Support Dashboard
+##  Interactive Geotechnical Decision-Support Dashboard
 
 The accompanying interactive web dashboard is an edge-native, zero-dependency analytical platform connecting multi-model predictions with geotechnical field operations.
 
@@ -173,7 +173,7 @@ The accompanying interactive web dashboard is an edge-native, zero-dependency an
 
 ---
 
-## 🏔 Ground-Truth Field Context: Western Himalayas
+##  Ground-Truth Field Context: Western Himalayas
 
 The dataset and model are calibrated against documented historical slope failure sites across Himachal Pradesh:
 
@@ -184,7 +184,7 @@ The dataset and model are calibrated against documented historical slope failure
 
 ---
 
-## 📁 Repository Structure
+##  Repository Structure
 
 ```
 GeoSlope-AI-Geospatial-Landslide-Risk-Prediction-System/
@@ -227,7 +227,7 @@ GeoSlope-AI-Geospatial-Landslide-Risk-Prediction-System/
 
 ---
 
-## ⚡ Quickstart & Reproducibility
+##  Quickstart & Reproducibility
 
 ### 1. Clone & Set Up Python Environment
 
@@ -275,7 +275,7 @@ jupyter notebook
 
 ---
 
-## 📚 Technical Documentation & Specifications
+##  Technical Documentation & Specifications
 
 * [**ARCHITECTURE.md**](ARCHITECTURE.md): Complete technical design document detailing data ingestion, mathematical framing, cost-sensitive threshold derivation, and edge deployment architecture.
 * [**MODEL_CARD.md**](MODEL_CARD.md): Formal Google Research Model Card (*Mitchell et al.*) documenting model parameters, quantitative breakdown, out-of-scope tasks, and ethical considerations.
@@ -283,7 +283,7 @@ jupyter notebook
 
 ---
 
-## 📑 Citation & Attribution
+##  Citation & Attribution
 
 If you use this geotechnical machine learning pipeline, dataset transformations, or interactive simulator in academic or applied research, please cite:
 
@@ -300,7 +300,7 @@ If you use this geotechnical machine learning pipeline, dataset transformations,
 
 ---
 
-## 👥 Authors & Acknowledgments
+##  Authors & Acknowledgments
 
 * **Ritigya Mishra** ([@ritigyam2](https://github.com/ritigyam2)) — Machine Learning Architecture, Geotechnical Modeling & Dashboard Engineering
 * **Khushi Dang** — Geospatial Preprocessing & Environmental Feature Engineering
@@ -311,6 +311,6 @@ If you use this geotechnical machine learning pipeline, dataset transformations,
 
 ---
 
-## 📜 License
+##  License
 
 This project is licensed under the [MIT License](LICENSE) — free for academic, non-commercial, and commercial research and development with attribution.
