@@ -1,0 +1,27 @@
+cff-version: 1.2.0
+message: "If you use this geotechnical machine learning pipeline, dataset transformations, or inference system in academic or applied research, please cite it as below."
+title: "GeoSlope-AI: Geospatial Landslide Risk Prediction System"
+abstract: "A high-precision geotechnical machine learning platform and multi-model consensus framework for landslide susceptibility prediction and risk assessment in the Western Himalayas (Himachal Pradesh, India). Built on 12,409 georeferenced inventory records, 47 engineered terrain-climate predictors, and evaluated across GBDT (XGBoost), Random Forest, SVM, and Logistic Regression with zero data-leakage guarantees."
+authors:
+  - family-names: "Mishra"
+    given-names: "Ritigya"
+    affiliation: "University of Petroleum and Energy Studies (UPES)"
+  - family-names: "Dang"
+    given-names: "Khushi"
+    affiliation: "University of Petroleum and Energy Studies (UPES)"
+  - family-names: "Pandey"
+    given-names: "Shruti"
+    affiliation: "University of Petroleum and Energy Studies (UPES)"
+version: 1.0.0
+date-released: 2026-10-26
+license: MIT
+repository-code: "https://github.com/ritigyam2/GeoSlope-AI-Geospatial-Landslide-Risk-Prediction-System"
+keywords:
+  - "landslide-susceptibility"
+  - "geospatial-ai"
+  - "geotechnical-engineering"
+  - "western-himalayas"
+  - "gradient-boosted-trees"
+  - "random-forest"
+  - "natural-hazard-mitigation"
+  - "early-warning-system"
