@@ -87,7 +87,7 @@ The dashboard is a local browser interface backed by the repository's JavaScript
 ├── landslide_prediction_svm.ipynb
 ├── landslide_*_preprocessed.csv    # Prepared train/test data
 ├── landslide_*_engineered.csv      # Engineered train/test data
-├── *_lands lide_model.*            # Serialized model artifacts
+├── *_model.*            # Serialized model artifacts
 └── *.docx                          # Supporting technical reports
 ~~~
 
